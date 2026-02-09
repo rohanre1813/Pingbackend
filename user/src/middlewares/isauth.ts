@@ -28,14 +28,11 @@ export const isauth = async (
 
  const token = authheader.split(" ")[1] as string;
 
-if (!token) {
-  res.status(401).json({ message: "Token missing" });
-  return;
-}
+
 
 
     // ✅ tell TS it's definitely string
-const secret = process.env.jwt_secret;
+const secret = process.env.jwt_secret as string;
 
 if (!secret) {
   throw new Error("jwt_secret not set");
