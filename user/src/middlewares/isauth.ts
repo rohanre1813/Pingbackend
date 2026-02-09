@@ -26,7 +26,7 @@ export const isauth = async (
       return;
     }
 
- const token = authheader.split(" ")[1];
+ const token = authheader.split(" ")[1] as string;
 
 if (!token) {
   res.status(401).json({ message: "Token missing" });
