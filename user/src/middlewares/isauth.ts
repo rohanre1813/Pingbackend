@@ -26,15 +26,27 @@ export const isauth = async (
       return;
     }
 
-    const token = authheader.split(" ")[1];
+ const token = authheader.split(" ")[1];
+
+if (!token) {
+  res.status(401).json({ message: "Token missing" });
+  return;
+}
+
 
     // ✅ tell TS it's definitely string
- const secret = process.env.jwt_secret ?? "";
+const secret = process.env.jwt_secret;
+
+if (!secret) {
+  throw new Error("jwt_secret not set");
+}
+
 
 
 
     // ✅ cast through unknown (official TS fix)
     const decodedvalue = jwt.verify(token, secret) as unknown as MyJwtPayload;
+
 
     if (!decodedvalue?.user) {
       res.status(401).json({
