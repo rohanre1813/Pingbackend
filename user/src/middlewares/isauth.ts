@@ -29,7 +29,8 @@ export const isauth = async (
     const token = authheader.split(" ")[1];
 
     // ✅ tell TS it's definitely string
- const secret: string = process.env.jwt_secret as string;
+ const secret = process.env.jwt_secret ?? "";
+
 
 
     // ✅ cast through unknown (official TS fix)

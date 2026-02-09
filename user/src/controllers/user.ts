@@ -3,7 +3,8 @@ import { redisclient } from "../index.js";
 import { publishtoqueue } from "../config/rabbitmq.js";
 import { user as userModel } from "../model/user.js";
 import { generatetoken } from "../config/generatetokens.js";
-import type { authenticatedrequest } from "../middlewares/isauth.js";
+import type { AuthenticatedRequest } from "../middlewares/isauth.js";
+
 export const loginuser = trycatch(async (req, res, next) => {
   const { email } = req.body
 
@@ -89,12 +90,12 @@ export const verifyuser = trycatch(async (req, res, next) => {
   })
 })
 
-export const myprofile = trycatch(async (req: authenticatedrequest, res) => {
+export const myprofile = trycatch(async (req: AuthenticatedRequest, res) => {
   const user = await userModel.findById(req.user?._id);
   res.json(user);
 });
 
-export const updatename = trycatch(async (req: authenticatedrequest, res) => {
+export const updatename = trycatch(async (req: AuthenticatedRequest, res) => {
   const User = await userModel.findById(req.user?._id)
   if (!User) {
     res.status(401).json({
@@ -112,17 +113,17 @@ export const updatename = trycatch(async (req: authenticatedrequest, res) => {
   })
 })
 
-export const getallusers = trycatch(async (req: authenticatedrequest, res) => {
+export const getallusers = trycatch(async (req: AuthenticatedRequest, res) => {
   const users = await userModel.find();
 
   res.json(users);
 })
-export const getuser = trycatch(async (req: authenticatedrequest, res) => {
+export const getuser = trycatch(async (req: AuthenticatedRequest, res) => {
   const User = await userModel.findById(req.params.id);
   res.json(User)
 })
 
-export const blockUser = trycatch(async (req: authenticatedrequest, res) => {
+export const blockUser = trycatch(async (req: AuthenticatedRequest, res) => {
   const { id } = req.params as { id: string };
   const User = await userModel.findById(req.user?._id);
   if (!User) {
@@ -138,7 +139,7 @@ export const blockUser = trycatch(async (req: authenticatedrequest, res) => {
   res.json({ message: "User blocked successfully", blocked: User.blocked });
 });
 
-export const unblockUser = trycatch(async (req: authenticatedrequest, res) => {
+export const unblockUser = trycatch(async (req: AuthenticatedRequest, res) => {
   const { id } = req.params as { id: string };
   const User = await userModel.findById(req.user?._id);
   if (!User) {
