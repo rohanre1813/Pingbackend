@@ -1,39 +1,63 @@
 import type { Request, NextFunction, Response } from "express";
-import { type IUser } from "../model/user.js";
-import jwt from 'jsonwebtoken'
+import type { IUser } from "../model/user.js";
+import jwt from "jsonwebtoken";
 
-export interface authenticatedrequest extends Request {
+export interface AuthenticatedRequest extends Request {
   user?: IUser | null;
-
 }
-interface JwtPayload {
+export type authenticatedrequest = AuthenticatedRequest;
+
+interface MyJwtPayload {
   user: string;
 }
 
-export const isauth = async (req: authenticatedrequest, res: Response, next: NextFunction): Promise<void> => {
+export const isauth = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   try {
-    const authheader = req.headers.authorization
+    const authheader = req.headers.authorization;
+
     if (!authheader || !authheader.startsWith("Bearer ")) {
       res.status(401).json({
-        message: "Please Login-no auth header"
-      })
+        message: "Please Login - no auth header",
+      });
       return;
     }
-    const token = authheader.split(" ")[1]
-    const decodedvalue = jwt.verify(token, process.env.jwt_secret as string) as JwtPayload;
-    if (!decodedvalue || !decodedvalue.user) {
-      res.status(401).json({
-        message: "Invalid token"
-      })
-      return;
-    }
-    // @ts-ignore
-    req.user = decodedvalue.user;
-    next()
-  }
-  catch (err) {
-    res.status(401).json({
-      message: "please login -jwt error"
-    })
-  }
+
+ const token = authheader.split(" ")[1] as string;
+
+
+
+
+    // ✅ tell TS it's definitely string
+const secret = process.env.jwt_secret as string;
+
+if (!secret) {
+  throw new Error("jwt_secret not set");
 }
+
+
+
+
+    // ✅ cast through unknown (official TS fix)
+    const decodedvalue = jwt.verify(token, secret) as unknown as MyJwtPayload;
+
+
+    if (!decodedvalue?.user) {
+      res.status(401).json({
+        message: "Invalid token",
+      });
+      return;
+    }
+
+    req.user = decodedvalue.user as any;
+
+    next();
+  } catch {
+    res.status(401).json({
+      message: "please login - jwt error",
+    });
+  }
+};
