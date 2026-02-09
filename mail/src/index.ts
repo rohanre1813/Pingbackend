@@ -5,8 +5,8 @@ import { sendotpconumer } from './consumer.js';
 dotenv.config()
 sendotpconumer()
 const app=express();
-const PORT=process.env.PORT||5001
-app.listen(PORT,()=>{
-   console.log(`server running at ${PORT}`);
-   
-})
+const PORT = Number(process.env.PORT) || 5001;
+
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`server running on port ${PORT}`);
+});
