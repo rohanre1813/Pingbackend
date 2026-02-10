@@ -2,9 +2,8 @@ module.exports = {
   apps: [
     {
       name: "mail-service",
-      script: "src/index.ts",           // TS entry point
+      script: "dist/index.js",           // TS entry point
       interpreter: "node",              // run with Node
-      node_args: "--loader ts-node/esm", // ESM + TS support
       cwd: "/home/ubuntu/Pingbackend/mail", // important: working directory
       watch: false,
       env: {
