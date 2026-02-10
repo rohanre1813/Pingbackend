@@ -6,11 +6,15 @@ dotenv.config();
 
 export const sendOtpConsumer = async () => {
   try {
+  const RABBITMQ_PORT = process.env.RABBITMQ_PORT
+  ? parseInt(process.env.RABBITMQ_PORT, 10)
+  : 5672;
+
     // 1️⃣ Connect to RabbitMQ
     const connection = await amqp.connect({
       protocol: "amqp",
       hostname: process.env.RABBITMQ_HOST,
-      port: 5672,
+      port: RABBITMQ_PORT,
       username: process.env.RABBITMQ_USERNAME,
       password: process.env.RABBITMQ_PASSWORD,
     });
