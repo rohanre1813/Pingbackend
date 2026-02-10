@@ -23,8 +23,7 @@ export const isauth = async (req: authenticatedrequest, res: Response, next: Nex
       })
       return;
     }
-    const token = authheader.split(" ")[1]
-    console.log(token)
+   const token = authheader.split(" ")[1] as string
     const decodedvalue = jwt.verify(token, process.env.jwt_secret as string) as unknown as JwtPayload
     if (!decodedvalue || !decodedvalue.user) {
       console.log(decodedvalue.user);
