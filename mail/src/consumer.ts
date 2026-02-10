@@ -17,6 +17,7 @@ export const sendOtpConsumer = async () => {
       port: RABBITMQ_PORT,
       username: process.env.RABBITMQ_USERNAME,
       password: process.env.RABBITMQ_PASSWORD,
+      vhost: "/",
     });
 
     const channel = await connection.createChannel();
