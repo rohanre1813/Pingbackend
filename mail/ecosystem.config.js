@@ -1,7 +1,6 @@
-import dotenv from "dotenv";
-dotenv.config(); // loads your .env
+require('dotenv').config(); // load .env
 
-export default {
+module.exports = {
   apps: [
     {
       name: "mail-service",
